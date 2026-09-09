@@ -1,5 +1,5 @@
 import torch
-from multi_head_attention_wrapper import MultiHeadAttentionWrapper
+from multi_head_attention_wrapper import MultiHeadAttentionWrapper, MultiHeadAttention
 
 inputs = torch.tensor(
     [
@@ -14,9 +14,9 @@ inputs = torch.tensor(
 batch = torch.stack((inputs, inputs), dim=0)
 
 torch.manual_seed(123)
-context_length = batch.shape[1]
-d_in, d_out = 3, 2
-mha = MultiHeadAttentionWrapper(d_in, d_out, context_length, 0.0, num_heads=2)
+batch_size, context_length, d_in = batch.shape
+d_out = 2
+mha = MultiHeadAttention(d_in, d_out, context_length, 0.0, num_heads=2)
 
 context_vecs = mha(batch)
 
