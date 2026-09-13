@@ -1,7 +1,8 @@
 import torch
 import tiktoken
+import torch.nn as nn
 
-from dummy_gpt_model import DummyGptModel
+from dummy_gpt_model import DummyGptModel, LayerNorm
 from gpt_config import GPT_CONFIG_124M
 
 tokenizer = tiktoken.get_encoding("gpt2")
@@ -20,3 +21,14 @@ model = DummyGptModel(GPT_CONFIG_124M)
 logits = model(batch)
 print("Output shape: ", logits.shape)
 print(logits)
+
+torch.manual_seed(123)
+batch_example = torch.randn(2, 5)
+layer = nn.Sequential(nn.Linear(5, 6), nn.ReLU())
+# out = layer(ba)
+ln = LayerNorm(emb_dim=5)
+out_ln = ln(batch_example)
+mean = out_ln.mean(dim=-1, keepdim=True)
+var = out_ln.var(dim=-1, unbiased=False, keepdim=True)
+print("Mean: \n", mean)
+print("Variance: \n", var)
